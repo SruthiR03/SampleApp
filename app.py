@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for
 from flask_mysqldb import MySQL
 from flask_cors import CORS
 
@@ -29,22 +29,39 @@ def index():
         return 'Done!'
     return render_template('index.html')
 
-@app.route('/list',methods=['GET','POST'])
-def data():
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM SampleTable''')
-    results = cur.fetchall()
-    print(results)
 
-    return jsonify(results)
 
-@app.route('/<name>')
-def intro(name):
-    return '<h1>Hello {}!</h1>'.format(name)
+@app.route('/data', methods=['GET','POST'])
+def get_data():
+    if request.method == 'POST':
+        data = request.get_json(force=True)
+        #return jsonify(data)
+        TICKER = data.get("TICKER")
+        NAME = data.get("NAME")
+        SECURITY_TYPE = data.get("SECURITY_TYPE")
+        QUANTITY = data.get("QUANTITY")
+        PURCHASE_PRICE = data.get("PURCHASE_PRICE")
+        PURCHASE_DATE = data.get("PURCHASE_DATE")
 
-@app.route('/about')
-def about():
-    return '<h1>About Page</h1> \n I am a person who is interested in coding'
+        print(TICKER)
+        print(NAME)
+        print(SECURITY_TYPE)
+        print(QUANTITY)
+        print(PURCHASE_PRICE)
+        print(PURCHASE_DATE)
+
+
+        cur = mysql.connection.cursor()
+
+        cur.execute("INSERT INTO DataEntryTable (TICKER,NAME,SECURITY_TYPE,QUANTITY,PURCHASE_PRICE,PURCHASE_DATE) VALUES(%s,%s,%s,%s,%s,%s)",(TICKER,NAME,SECURITY_TYPE,QUANTITY,PURCHASE_PRICE,PURCHASE_DATE))
+
+        mysql.connection.commit()
+
+
+        cur.close()
+            
+    return "Done!"
+
 
 if __name__ == "main":
     app.run(debug=True)

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-//import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-root',
@@ -10,33 +11,26 @@ import { HttpClient } from '@angular/common/http';
 export class AppComponent {
 
   title = 'SampleProject';
-
-  name = 'hi';
-  email = 'john@gmail.com';
-
-  constructor(private http: HttpClient) { }
-  httpdata;
-  ngOnInit() {
-    this.http.get("http://127.0.0.1:5000/list").
-    //pipe(map((response) => response.json())).
-    subscribe((data) => this.displaydata(data));
-}
-displaydata(data) {this.httpdata = data;}
-
-/*
+  TICKER: string;
+  NAME: string;
+  SECURITY_TYPE: string;
+  QUANTITY: number;
+  PURCHASE_PRICE: number;
+  PURCHASE_DATE: Date;
  
 
-  getTextFile() {
-    // The Observable returned by get() is of type Observable<string>
-    // because a text response was specified.
-    // There's no need to pass a <string> type parameter to get().
-    return this.http.get('http://127.0.0.1:5000/list')
-      .pipe(
-        tap( // Log the result or error
-          data => this.log(filename, data),
-          error => this.logError(filename, error)
-        )
-      );
+
+  constructor(private http: HttpClient) { }
+  
+  onSubmit(data)
+  {
+    this.http.post("http://127.0.0.1:5000/data",data)
+    .subscribe((result)=>{
+      console.log("result",result)
+    })
+    console.log(data);
+
   }
-*/
+
+
 }
