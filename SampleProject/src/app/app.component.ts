@@ -30,6 +30,17 @@ export class AppComponent {
     })
     console.log(data);
 
+    
+    
+    /*
+    data.TICKER = "";
+    data.NAME = "";
+    data.SECURITY_TYPE = "";
+    data.QUANTITY = "";
+    data.PURCHASE_PRICE = "";
+    data.PURCHASE_DATE = "";
+    */
+
   }
 
 
